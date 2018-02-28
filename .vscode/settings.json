@@ -1,0 +1,6 @@
+{
+  "typescript.format.insertSpaceAfterConstructor": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+
+  "typescript.extension.sortImports.omitSemicolon": true
+}
