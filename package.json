@@ -9,7 +9,6 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@google-cloud/speech": "^1.1.0",
     "bufferutil": "^3.0.3",
     "discord.js": "^11.3.0",
     "dotenv": "^5.0.0",
