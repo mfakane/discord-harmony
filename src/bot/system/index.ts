@@ -25,11 +25,14 @@ export default class SystemBot extends CommandBot {
     const countAndFaces = dice.split('d')
     const faces = parseInt(countAndFaces.pop() || '6', 10)
     const count = countAndFaces.length ? parseInt(countAndFaces.pop() || '1', 10) : 1
+    let total = 0
 
     for (let i = 0; i < count; i++) {
-      messages.push(Math.floor(Math.random() * faces + 1).toString())
+      const value = Math.floor(Math.random() * faces + 1)
+      messages.push(value.toString())
+      total += value
     }
 
-    source.channel.send(messages.join(', '))
+    source.channel.send(`${messages.join(', ')}, Total: ${total}`)
   }
 }
