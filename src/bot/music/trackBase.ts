@@ -27,7 +27,7 @@ export default abstract class TrackBase implements Track {
     const embed = new Discord.RichEmbed()
       .setTitle(this.title)
       .setAuthor(this.artist)
-      .addField('Length', `${('0' + this.length.getHours()).slice(-2)}:${('0' + this.length.getMinutes()).slice(-2)}:${('0' + this.length.getSeconds()).slice(-2)}`, true)
+      .addField('Length', `${this.length.toUTCString().split(' ')[4]}`, true)
       .setFooter(this.source)
 
     if (this.thumbnailUrl) embed.setThumbnail(this.thumbnailUrl)

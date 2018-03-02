@@ -128,8 +128,9 @@ export default class MusicBot extends CommandBot {
       return
     }
 
-    const message = player.playlist.map((track, index) => `${index + 1}. ${track.toFormattedString()}${player.isPlaying && index === 0 ? ' (再生中)' : ''}`).join('\n')
-    await source.channel.send(message)
+    const list = player.playlist.map((track, index) => `${index + 1}. ${track.toFormattedString()}${player.isPlaying && index === 0 ? ' (再生中)' : ''}`).join('\n')
+    const totalLength = new Date(player.playlist.reduce((time, track) => time + track.length.valueOf(), 0))
+    await source.channel.send(`🎵 | プレイリストには楽曲が **${player.playlist.length}** 件あり、合計時間は **${totalLength.toUTCString().split(' ')[4]}** です。\n` + list)
   }
 
   @CommandBot.command('現在の音量を表示もしくは新しい音量を設定します。')

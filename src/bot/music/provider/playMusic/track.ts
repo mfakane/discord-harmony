@@ -25,7 +25,7 @@ export default class PlayMusicTrack extends TrackBase {
   }
 
   get length () {
-    return new Date(0, 0, 0, 0, 0, 0, Number(this.track.durationMillis))
+    return new Date(Number(this.track.durationMillis))
   }
 
   get source () {
