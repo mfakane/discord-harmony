@@ -213,7 +213,7 @@ class Player {
     tracks.forEach(track => track.prepare())
     this.playlist.push(...tracks)
 
-    if (!this.isPlaying) await this.play()
+    if (this.voiceConnection && !this.isPlaying) await this.play()
   }
 
   async play () {
