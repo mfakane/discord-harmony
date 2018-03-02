@@ -20,10 +20,20 @@ export default class DiscordBot {
   }
 
   private async onMessage (message: Discord.Message) {
-    if (!this.prefix) return
-    if (message.content.indexOf(this.prefix) === -1) return
+    const contentWithoutPrefix = () => {
+      if (this.prefix && message.content.indexOf(this.prefix) === 0) {
+        return message.content.substr(this.prefix.length)
+      }
+      if (message.content.indexOf(`<@${this.client.user.id}>`) === 0) {
+        return message.content.substr(this.client.user.id.length + 3)
+      }
+      return null
+    }
 
-    const args = message.content.substr(this.prefix.length).trim().split(' ').map(x => x.trim()).filter(x => x.length)
+    const content = contentWithoutPrefix()
+    if (!content) return
+
+    const args = content.trim().split(' ').map(x => x.trim()).filter(x => x.length)
     if (!args.length) return
 
     const commandName = args.shift()
