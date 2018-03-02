@@ -40,7 +40,7 @@ export default abstract class CommandBot implements Bot {
         await rt
       }
     } catch (ex) {
-      source.channel.send(`:warning: \`${ex}\``)
+      source.channel.send(`⚠️ ｜コマンドの実行に失敗しました: \`${ex}\``)
     }
     return true
   }

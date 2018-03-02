@@ -3,7 +3,7 @@ import CommandBot from '../commandBot'
 import DiscordBot from '../../discordBot'
 
 export default class SystemBot extends CommandBot {
-  @CommandBot.command('Shows a help.')
+  @CommandBot.command('使用可能なコマンドを一覧します。')
   private help (source: Discord.Message) {
     const commands: string[] = []
 
@@ -15,10 +15,10 @@ export default class SystemBot extends CommandBot {
       }
     }
 
-    source.channel.send(`Available commands:\n${commands.join('\n')}`)
+    source.channel.send(`ℹ️ | 使用可能なコマンド一覧:\n${commands.join('\n')}`)
   }
 
-  @CommandBot.command('Throws a dice by `2d6` syntax.')
+  @CommandBot.command('`2d6` のような記法でダイスを投げます。')
   private dice (source: Discord.Message, dice: string) {
     if (!dice) return
     const messages: string[] = []
@@ -29,10 +29,10 @@ export default class SystemBot extends CommandBot {
 
     for (let i = 0; i < count; i++) {
       const value = Math.floor(Math.random() * faces + 1)
-      messages.push(value.toString())
+      messages.push(`**${value}**`)
       total += value
     }
 
-    source.channel.send(`${messages.join(', ')}, Total: ${total}`)
+    source.channel.send(`🎲 | \`${dice}\` の結果: ${messages.join(', ')}, 合計: **${total}**`)
   }
 }

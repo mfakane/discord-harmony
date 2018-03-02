@@ -43,7 +43,7 @@ export default class DiscordBot {
       if (await bot.invokeCommand(message, commandName, ...args)) return
     }
 
-    message.channel.send(`:information_source: Command \`${commandName}\` is unknown. Please use \`help\` to get a list of available commands.`)
+    message.channel.send(`❓ | \`${commandName}\` は知らないコマンドです。\`help\` で使えるコマンドの一覧が見れます。`)
   }
 
   private * prepareBots (): IterableIterator<Bot> {

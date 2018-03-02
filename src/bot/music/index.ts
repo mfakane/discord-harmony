@@ -17,7 +17,7 @@ export default class MusicBot extends CommandBot {
         && super.initialize(bot)
   }
 
-  @CommandBot.command('Let the bot join the current user\'s voice channel.')
+  @CommandBot.command('現在ユーザがいる音声チャンネルに呼び出します。')
   private async summon (source: Discord.Message) {
     const voiceChannel = source.member.voiceChannel
     if (!voiceChannel) return
@@ -28,7 +28,7 @@ export default class MusicBot extends CommandBot {
     await source.react('👌')
   }
 
-  @CommandBot.command('Leaves the current voice channel.')
+  @CommandBot.command('現在入っている音声チャンネルから退出します。')
   private async leave (source: Discord.Message) {
     const player = this.getPlayer(source)
     player.leave()
@@ -36,23 +36,23 @@ export default class MusicBot extends CommandBot {
     await source.react('👌')
   }
 
-  @CommandBot.command('Search for a track.')
+  @CommandBot.command('指定された楽曲を検索します。')
   private async search (source: Discord.Message, ...query: string[]) {
     const track = await this.findSingleTrack(query.join(' '))
     if (!track) {
-      source.channel.send('No tracks found for query: `' + query + '`')
+      source.channel.send('🔍 | `' + query + '` に関する楽曲が見つかりませんでした。')
       return
     }
     source.channel.send(track.toRichEmbed())
   }
 
-  @CommandBot.command('Search for a track and add it to playlist.')
+  @CommandBot.command('プレイリストにある楽曲を再生するか、指定された楽曲を検索しプレイリストに追加します。')
   private async play (source: Discord.Message, ...query: string[]) {
     const player = this.getPlayer(source)
     if (!player.voiceConnection && source.member.voiceChannel) await player.join(source.member.voiceChannel)
     if (!query.length) {
       if (!player.playlist.length) {
-        source.channel.send('Playlist is empty! Use `play <query>` to add some tracks.')
+        source.channel.send('🎵 ｜プレイリストは空です。`play <検索文字列>` を使用して再生したい楽曲を追加してください。')
         return
       }
       await player.play()
@@ -62,13 +62,13 @@ export default class MusicBot extends CommandBot {
     const wasEmpty = !player.playlist.length
     const track = await this.findSingleTrack(query.join(' '))
     if (!track) {
-      source.channel.send('No tracks found for query: `' + query + '`')
+      source.channel.send('🔍 | `' + query + '` に関する楽曲が見つかりませんでした。')
       return
     }
 
     await player.enqueue(track)
 
-    if (!wasEmpty || !player.voiceConnection) await source.channel.send(`Enqueued ${track.toFormattedString()} at position ${player.playlist.length}.`)
+    if (!wasEmpty || !player.voiceConnection) await source.channel.send(`🎵 | ${player.playlist.length} 番目の楽曲としてプレイリストに追加しました: ${track.toFormattedString()}`)
 
     source.channel.send(track.toRichEmbed())
   }
@@ -81,30 +81,30 @@ export default class MusicBot extends CommandBot {
     return null
   }
 
-  @CommandBot.command('Show what track is playing now.')
+  @CommandBot.command('再生中の楽曲を表示します。')
   private async np (source: Discord.Message) {
     const player = this.getPlayer(source)
     const track = player.current
 
     if (!track) {
-      source.channel.send('Playing nothing right now!')
+      source.channel.send('⏹️ | 現在再生中の楽曲はありません。')
       return
     }
 
-    await source.channel.send(`Now playing: ${track.toFormattedString()}`)
+    await source.channel.send(`▶️ | 再生中: ${track.toFormattedString()}`)
     await source.channel.send(track.toRichEmbed())
   }
 
-  @CommandBot.command('Skip current playing track.')
+  @CommandBot.command('再生中の楽曲をスキップします。')
   private skip (source: Discord.Message) {
     const player = this.getPlayer(source)
     const track = player.current
     if (!track) return
-    source.channel.send(`Skipping ${track.toFormattedString()}...`)
+    source.channel.send(`⏭️ | ${track.toFormattedString()} をスキップします...`)
     player.skip()
   }
 
-  @CommandBot.command('Stop playing tracks.')
+  @CommandBot.command('楽曲の再生を停止します。')
   private async stop (source: Discord.Message) {
     const player = this.getPlayer(source)
     player.stop()
@@ -112,7 +112,7 @@ export default class MusicBot extends CommandBot {
     await source.react('👌')
   }
 
-  @CommandBot.command('Clear the whole playlist.')
+  @CommandBot.command('プレイリストをクリアします。')
   private async clear (source: Discord.Message) {
     const player = this.getPlayer(source)
     player.clear()
@@ -120,23 +120,23 @@ export default class MusicBot extends CommandBot {
     await source.react('👌')
   }
 
-  @CommandBot.command('Shows the playlist.')
+  @CommandBot.command('プレイリストにある楽曲を一覧します。')
   private async list (source: Discord.Message) {
     const player = this.getPlayer(source)
     if (!player.playlist.length) {
-      source.channel.send('Playlist empty!')
+      source.channel.send('🎵 | プレイリストは空です。')
       return
     }
 
-    const message = player.playlist.map((track, index) => `${index + 1}. ${track.toFormattedString()}${player.isPlaying && index === 0 ? ' (Now Playing)' : ''}`).join('\n')
+    const message = player.playlist.map((track, index) => `${index + 1}. ${track.toFormattedString()}${player.isPlaying && index === 0 ? ' (再生中)' : ''}`).join('\n')
     await source.channel.send(message)
   }
 
-  @CommandBot.command('Set the volume for music.')
+  @CommandBot.command('現在の音量を表示もしくは新しい音量を設定します。')
   private async volume (source: Discord.Message, volume?: string) {
     const player = this.getPlayer(source)
     if (!volume) {
-      source.channel.send(`Current volume: \`${player.volume}\``)
+      source.channel.send(`🔈 | 現在の音量: **${player.volume}**`)
       return
     }
     const volumeAmount = Math.max(0, Math.min(Number(volume), 1))
@@ -220,11 +220,11 @@ class Player {
 
     const track = this.playlist.current
 
-    this.notifyChannel(`Now playing: ${track.toFormattedString()}`)
+    this.notifyChannel(`▶️ | 再生中: ${track.toFormattedString()}`)
 
     const stream = await track.play(this.voiceConnection, { volume: this.volume })
 
-    if (!stream) throw new Error('Failed to play track')
+    if (!stream) throw new Error('⚠️ | 楽曲の再生に失敗しました。')
 
     stream.on('end', reason => {
       (this.voiceConnection as any).setSpeaking(false)
@@ -232,10 +232,7 @@ class Player {
       if (reason === 'userstop') return
 
       this.playlist.shift()
-      if (!this.playlist.length) {
-        this.notifyChannel('Nothing to play next!')
-        return
-      }
+      if (!this.playlist.length) return
 
       this.play()
     })
