@@ -39,11 +39,22 @@ export default class DiscordBot {
     const commandName = args.shift()
     if (!commandName) return
 
+    if (await this.invokeSystemCommand(message, commandName, ...args)) return
+
     for (const bot of this.bots) {
       if (await bot.invokeCommand(message, commandName, ...args)) return
     }
 
     message.channel.send(`❓ | \`${commandName}\` は知らないコマンドです。\`help\` で使えるコマンドの一覧が見れます。`)
+  }
+
+  private async invokeSystemCommand (source: Discord.Message, commandName: string, ...args: string[]) {
+    switch (commandName) {
+      case 'help':
+        await source.channel.send(this.bots.map(bot => bot.help()).join('\n\n'))
+        return true
+    }
+    return false
   }
 
   private * prepareBots (): IterableIterator<Bot> {

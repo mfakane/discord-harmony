@@ -3,19 +3,8 @@ import CommandBot from '../commandBot'
 import DiscordBot from '../../discordBot'
 
 export default class SystemBot extends CommandBot {
-  @CommandBot.command('使用可能なコマンドを一覧します。')
-  private help (source: Discord.Message) {
-    const commands: string[] = []
-
-    for (const bot of this.bot.bots) {
-      if (!(bot instanceof CommandBot)) continue
-
-      for (const command of bot.commands) {
-        commands.push(`**${command[0]}** ${command[1].description}`)
-      }
-    }
-
-    source.channel.send(`ℹ️ | 使用可能なコマンド一覧:\n${commands.join('\n')}`)
+  help () {
+    return `ℹ️ | 基本機能:\n${this.getHelpText()}`
   }
 
   @CommandBot.command('`2d6` のような記法でダイスを投げます。')

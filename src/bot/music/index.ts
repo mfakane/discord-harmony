@@ -17,6 +17,10 @@ export default class MusicBot extends CommandBot {
         && super.initialize(bot)
   }
 
+  help () {
+    return `🎵 | 音楽再生機能\n${this.getHelpText()}`
+  }
+
   @CommandBot.command('現在ユーザがいる音声チャンネルに呼び出します。')
   private async summon (source: Discord.Message) {
     const voiceChannel = source.member.voiceChannel

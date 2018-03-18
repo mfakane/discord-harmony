@@ -44,6 +44,18 @@ export default abstract class CommandBot implements Bot {
     }
     return true
   }
+
+  help () {
+    return ''
+  }
+
+  protected getHelpText () {
+    const commands: string[] = []
+    for (const command of this.commands) {
+      commands.push(`**${command[0]}** ${command[1].description}`)
+    }
+    return commands.join('\n')
+  }
 }
 
 class CommandDefinition {

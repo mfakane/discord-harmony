@@ -9,4 +9,5 @@ export default interface Bot {
 
   initialize (bot: DiscordBot): boolean
   invokeCommand (source: Discord.Message, commandName: string, ...args: string[]): Promise<boolean>
+  help (): string
 }
