@@ -63,8 +63,13 @@ export default class MusicBot extends CommandBot {
       return
     }
 
+    source.channel.startTyping()
+
     const wasEmpty = !player.playlist.length
     const track = await this.findSingleTrack(query.join(' '))
+
+    source.channel.stopTyping()
+
     if (!track) {
       source.channel.send('🔍 | `' + query + '` に関する楽曲が見つかりませんでした。')
       return
@@ -165,12 +170,11 @@ class Player {
   private client: Discord.Client
   private guild: Discord.Guild
   private internalVolume = 0.1
-  private notifyChannel: (message: string) => void
+  private channel: Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel | null = null
 
   constructor (guild: Discord.Guild) {
     this.client = guild.client
     this.guild = guild
-    this.notifyChannel = _ => { /* noop */ }
   }
 
   get volume () {
@@ -204,7 +208,7 @@ class Player {
   }
 
   setNotificationChannel (channel: Discord.TextChannel | Discord.DMChannel | Discord.GroupDMChannel) {
-    this.notifyChannel = message => channel.send(message)
+    this.channel = channel
   }
 
   leave () {
@@ -224,8 +228,9 @@ class Player {
     if (!this.playlist.current) return
 
     const track = this.playlist.current
+    const channel = this.channel
 
-    this.notifyChannel(`▶️ | 再生中: ${track.toFormattedString()}`)
+    if (channel) await channel.send(`▶️ | 再生中: ${track.toFormattedString()}`)
 
     const stream = await track.play(this.voiceConnection, { volume: this.volume })
 
