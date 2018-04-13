@@ -1,7 +1,6 @@
 import PlayMusicClient from './client'
 import PlayMusicTrack from './track'
 import Provider from '../'
-import Track from '../../track'
 
 export default class PlayMusicProvider implements Provider {
   private playMusic: PlayMusicClient
