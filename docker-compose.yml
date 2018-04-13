@@ -1,0 +1,7 @@
+version: '3.0'
+services:
+  discord-harmony:
+    build: .
+    volumes:
+      - .env:/app/.env
+    restart: always
