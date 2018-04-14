@@ -17,7 +17,8 @@
     "ffmpeg": "^0.0.4",
     "node-opus": "^0.2.7",
     "playmusic": "^2.3.0",
-    "postinstall-build": "^5.0.1"
+    "postinstall-build": "^5.0.1",
+    "ytdl-core": "^0.20.2"
   },
   "devDependencies": {
     "@types/dotenv-safe": "^4.0.1",

@@ -5,11 +5,13 @@ import Playlist from './playlist'
 import PlayMusicProvider from './provider/playMusic'
 import Provider from './provider'
 import Track from './track'
+import YoutubeProvider from './provider/youtube'
 
 export default class MusicBot extends CommandBot {
   private players = new Map<Discord.Snowflake, Player>()
   private providers = [
-    new PlayMusicProvider()
+    new PlayMusicProvider(),
+    new YoutubeProvider()
   ]
 
   initialize (bot: DiscordBot) {
